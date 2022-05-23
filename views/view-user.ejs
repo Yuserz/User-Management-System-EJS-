@@ -6,10 +6,10 @@
 </nav>
 
 <div class="view-user p-5">
-  {{#each rows}}
+  <% for(var i=0; i < rows.length; i++) { %>
   <div class="row mb-5">
     <div class="col text-center">
-      <h3>{{this.first_name}} {{this.last_name}}</h3>
+      <h3><%= rows[i].first_name %> <%= rows[i].last_name %></h3>
     </div>
   </div>
   <div class="row">
@@ -25,10 +25,10 @@
         </thead>
         <tbody>
           <tr>
-            <th scope="row">{{this.first_name}}</th>
-            <td>{{this.last_name}}</td>
-            <td>{{this.email}}</td>
-            <td>{{this.phone}}</td>
+            <th scope="row"><%= rows[i].first_name %></td>
+            <td><%= rows[i].last_name %></td>
+            <td><%= rows[i].email %></td>
+            <td><%= rows[i].phone %></td>
           </tr>
         </tbody>
       </table>
@@ -44,5 +44,5 @@
       </div>
     </div>
   </div>
-  {{/each}}
+  <% } %>>
 </div>
