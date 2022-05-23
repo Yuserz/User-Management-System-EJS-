@@ -1,27 +1,43 @@
-// Imports
-const express = require('express')
-const expressLayouts = require('express-ejs-layouts')
+const express = require('express');
+const exphbs = require('express-handlebars');
+const bodyParser = require('body-parser');
+const mysql = require('mysql');
+const dotenv = require("dotenv");
 
-const app = express()
-const port = 5000
+dotenv.config({path: './.env'})
+
+const app = express();
+
+// Parsing middleware
+// Parse application/x-www-form-urlencoded
+// app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: true})); // New
+
+// Parse application/json
+// app.use(bodyParser.json());
+app.use(express.json()); // New
 
 // Static Files
-app.use(express.static('public'))
-app.use('/css', express.static(__dirname + 'public/css'))
+app.use(express.static('public'));
 
-// Set Templating Engine
-app.use(expressLayouts)
-app.set('layout', './layouts/full-width')
-app.set('view engine', 'ejs')
+// Templating Engine
+app.engine('hbs', exphbs( {extname: '.hbs' }));
+app.set('view engine', 'hbs');
 
-// Routes
-app.get('', (req, res) => {
-    res.render('index', { title: 'Home Page'})
+// Connection Pool
+// You don't need the connection here as we have it in userController
+// let connection = mysql.createConnection({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASS,
+//   database: process.env.DB_NAME
+// });
+ 
+
+const routes = require('./server/routes/user');
+app.use('/', routes);
+
+app.listen(3000, () =>{
+    console.log("Server started in port 3000")
 })
 
-app.get('/about', (req, res) => {
-    res.render('about', { title: 'About Page', layout: './layouts/sidebar' })
-})
-
-// Listen on Port 5000
-app.listen(port, () => console.info(`App listening on port ${port}`))
